@@ -15,54 +15,52 @@ function App() {
         </a>
       </header>
 
-      <main className="Main">
-        <Layout.Root>
-          <Layout.Navigation />
+      <Layout.Root asMain className="Main">
+        <Layout.Navigation />
 
-          <Layout.Content>
-            <Layout.Section heading="Introduction" className="section">
-              <h2>Introduction</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
-                quasi atque ex eveniet illo nostrum maxime delectus quaerat
-                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
-                quae adipisci quia totam?
-              </p>
-              <img src={htmlPerspectives} alt="" />
-            </Layout.Section>
+        <Layout.Content>
+          <Layout.Section heading="Introduction" className="section">
+            <h2>Introduction</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+              quasi atque ex eveniet illo nostrum maxime delectus quaerat
+              perspiciatis quibusdam deserunt, harum fugiat beatae facilis quae
+              adipisci quia totam?
+            </p>
+            <img src={htmlPerspectives} alt="" />
+          </Layout.Section>
 
-            <Layout.Section heading="Problem" className="section">
-              <h2>Problem</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
-                quasi atque ex eveniet illo nostrum maxime delectus quaerat
-                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
-                quae adipisci quia totam?
-              </p>
-            </Layout.Section>
+          <Layout.Section heading="Problem" className="section">
+            <h2>Problem</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+              quasi atque ex eveniet illo nostrum maxime delectus quaerat
+              perspiciatis quibusdam deserunt, harum fugiat beatae facilis quae
+              adipisci quia totam?
+            </p>
+          </Layout.Section>
 
-            <Layout.Section heading="Solution" className="section">
-              <h2>Proposed Solution</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
-                quasi atque ex eveniet illo nostrum maxime delectus quaerat
-                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
-                quae adipisci quia totam?
-              </p>
-            </Layout.Section>
+          <Layout.Section heading="Solution" className="section">
+            <h2>Proposed Solution</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+              quasi atque ex eveniet illo nostrum maxime delectus quaerat
+              perspiciatis quibusdam deserunt, harum fugiat beatae facilis quae
+              adipisci quia totam?
+            </p>
+          </Layout.Section>
 
-            <Layout.Section heading="Caveats" className="section">
-              <h2>Caveats</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
-                quasi atque ex eveniet illo nostrum maxime delectus quaerat
-                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
-                quae adipisci quia totam?
-              </p>
-            </Layout.Section>
-          </Layout.Content>
-        </Layout.Root>
-      </main>
+          <Layout.Section heading="Caveats" className="section">
+            <h2>Caveats</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+              quasi atque ex eveniet illo nostrum maxime delectus quaerat
+              perspiciatis quibusdam deserunt, harum fugiat beatae facilis quae
+              adipisci quia totam?
+            </p>
+          </Layout.Section>
+        </Layout.Content>
+      </Layout.Root>
 
       <footer className="Footer">
         <h2>&copy; Lars Gunnar</h2>

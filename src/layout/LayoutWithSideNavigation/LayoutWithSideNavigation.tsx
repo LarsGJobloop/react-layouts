@@ -37,14 +37,19 @@ const useLayoutContext = (componentName: string) => {
   return context;
 };
 
-interface RootProps {
+interface RootProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
+  asMain?: true | undefined;
   children: [
     React.ReactElement<NavigationProps>,
     React.ReactElement<ContentProps>
   ];
 }
 
-const Root = ({ children }: RootProps) => {
+const Root = ({ children, asMain, className, ...rest }: RootProps) => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [navigation, content] = children;
 
@@ -52,12 +57,14 @@ const Root = ({ children }: RootProps) => {
     setHeaders(() => newHeaders);
   }
 
+  const Element = asMain ? "main" : "section";
+
   return (
     <LayoutContext value={{ headers, updateHeaders }}>
-      <section className={style["container"]}>
+      <Element className={style["container"] + " " + className} {...rest}>
         <div className={style["navigation"]}>{navigation}</div>
         <div className={style["content"]}>{content}</div>
-      </section>
+      </Element>
     </LayoutContext>
   );
 };
