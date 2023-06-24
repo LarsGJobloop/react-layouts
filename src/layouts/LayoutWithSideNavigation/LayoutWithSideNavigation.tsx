@@ -19,11 +19,11 @@ interface LayoutContextOptions {
   children: React.ReactNode;
 }
 
-const LayoutContext = ({ value, children }: LayoutContextOptions) => {
+function LayoutContext({ value, children }: LayoutContextOptions) {
   return (
     <layoutContext.Provider value={value}>{children}</layoutContext.Provider>
   );
-};
+}
 
 const useLayoutContext = (componentName: string) => {
   const context = useContext(layoutContext);
@@ -46,7 +46,10 @@ interface RootProps {
   className?: string;
 }
 
-export const Root = ({ children, asMain, className }: RootProps) => {
+/**
+ * Root component for the layout
+ */
+export function Root({ children, asMain, className }: RootProps) {
   const [headers, setHeaders] = useState<string[]>([]);
   const [navigation, content] = children;
 
@@ -64,14 +67,14 @@ export const Root = ({ children, asMain, className }: RootProps) => {
       </Element>
     </LayoutContext>
   );
-};
+}
 
 interface NavigationProps {
   linksAs?: (title: string) => JSX.Element;
   className?: string;
 }
 
-export const Navigation = ({ linksAs, className }: NavigationProps) => {
+export function Navigation({ linksAs, className }: NavigationProps) {
   const { headers } = useLayoutContext("Layout.Navigation");
 
   return (
@@ -86,13 +89,13 @@ export const Navigation = ({ linksAs, className }: NavigationProps) => {
       </ul>
     </nav>
   );
-};
+}
 
 interface ContentProps {
   children: React.ReactElement<SectionProps>[];
 }
 
-export const Content = ({ children }: ContentProps) => {
+export function Content({ children }: ContentProps) {
   const sectionsHeaders = children.map((child) => child.props.heading);
   const { updateHeaders } = useLayoutContext("Layout.Content");
 
@@ -101,17 +104,17 @@ export const Content = ({ children }: ContentProps) => {
   }, []);
 
   return <section>{children}</section>;
-};
+}
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
   heading: string;
   children: React.ReactNode;
 }
 
-export const Section = ({ heading, children, ...rest }: SectionProps) => {
+export function Section({ heading, children, ...rest }: SectionProps) {
   return (
     <section id={heading} {...rest}>
       {children}
     </section>
   );
-};
+}

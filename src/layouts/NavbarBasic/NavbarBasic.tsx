@@ -6,7 +6,7 @@ interface RootProps {
   children: JSX.Element[] | JSX.Element;
 }
 
-export const Root = ({ className, children }: RootProps) => {
+export function Root({ className, children }: RootProps) {
   let logo;
   let remainder;
 
@@ -24,17 +24,17 @@ export const Root = ({ className, children }: RootProps) => {
       {remainder}
     </header>
   );
-};
+}
 
 interface LogoProps {
   linkHome?: true;
   children: React.ReactNode;
 }
 
-export const Logo = ({ linkHome, children }: LogoProps) => {
+export function Logo({ linkHome, children }: LogoProps) {
   if (linkHome) {
     return <a href="/">{children}</a>;
   } else {
     return <div>{children}</div>;
   }
-};
+}
