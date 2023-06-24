@@ -26,6 +26,10 @@ function LayoutContext({ value, children }: LayoutContextOptions) {
   );
 }
 
+/**
+ * @param componentName Name of component to ease debugging
+ * @returns
+ */
 const useLayoutContext = (componentName: string) => {
   const context = useContext(layoutContext);
 
@@ -78,6 +82,9 @@ export function Root({ children, asMain, className }: RootProps) {
 }
 
 interface NavigationProps {
+  /**
+   * An alternative component for the link elements
+   */
   linksAs?: (title: string) => JSX.Element;
   className?: string;
 }
@@ -106,27 +113,39 @@ interface ContentProps {
   /**
    * Any number of Section Components
    */
-  children: React.ReactElement<SectionProps>[];
+  children:
+    | React.ReactElement<SectionProps>
+    | React.ReactElement<SectionProps>[];
 }
 
 /**
  * Container Component for the sections
  */
 export function Content({ children }: ContentProps) {
-  const sectionsHeaders = useMemo(
-    () => children.map((child) => child.props.heading),
-    [children]
-  );
+  const sectionsHeaders = useMemo(() => {
+    if (!Array.isArray(children)) {
+      return children.props.heading;
+    }
+
+    return children.map((child) => child.props.heading);
+  }, [children]);
   const { updateHeaders } = useLayoutContext("Layout.Content");
 
   useEffect(() => {
-    updateHeaders(sectionsHeaders);
+    if (Array.isArray(sectionsHeaders)) {
+      updateHeaders(sectionsHeaders);
+    } else {
+      updateHeaders([sectionsHeaders]);
+    }
   }, [sectionsHeaders, updateHeaders]);
 
   return <section>{children}</section>;
 }
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
+  /**
+   * ID and text used for sided navigation
+   */
   heading: string;
   /**
    * Any number of HTML Elements or React Components
@@ -138,6 +157,10 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
  * A section component which is linked to through the Navigtion component
  */
 export function Section({ heading, children, ...rest }: SectionProps) {
+  // Throws errors if used outside the root layout
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const context = useLayoutContext("Layout.Section");
+
   return (
     <section id={heading} {...rest}>
       {children}
