@@ -4,7 +4,7 @@ import Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
 function App() {
   return (
     <div className="App">
-      <header className="Navbar">
+      <header className="Navbar glass-frosted">
         <div>
           <h1>Layout Component</h1>
           <h2>Example of a Layout Component with a navigation sidebar</h2>
