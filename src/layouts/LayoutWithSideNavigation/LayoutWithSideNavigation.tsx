@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import style from "./style.module.css";
@@ -13,6 +14,8 @@ const layoutContext = createContext<ILayoutContext | undefined>(undefined);
 interface ILayoutContext {
   headers: string[];
   updateHeaders: (newHeaders: string[]) => void;
+  currentSection: string;
+  updateCurrentSection: (newSection: string) => void;
 }
 
 interface LayoutContextOptions {
@@ -63,16 +66,28 @@ interface RootProps {
  */
 export function Root({ children, asMain, className }: RootProps) {
   const [headers, setHeaders] = useState<string[]>([]);
+  const [currentSection, setCurrentSection] = useState<string>("");
   const [navigation, content] = children;
 
   function updateHeaders(newHeaders: string[]) {
     setHeaders(() => newHeaders);
   }
 
+  function updateCurrentSection(newSection: string) {
+    setCurrentSection(newSection);
+  }
+
+  const context: ILayoutContext = {
+    headers,
+    updateHeaders,
+    currentSection,
+    updateCurrentSection,
+  };
+
   const Element = asMain ? "main" : "section";
 
   return (
-    <LayoutContext value={{ headers, updateHeaders }}>
+    <LayoutContext value={context}>
       <Element className={style["container"] + " " + className}>
         <div className={style["navigation"]}>{navigation}</div>
         <div className={style["content"]}>{content}</div>
@@ -93,14 +108,17 @@ interface NavigationProps {
  * Sided Navigation component
  */
 export function Navigation({ linksAs, className }: NavigationProps) {
-  const { headers } = useLayoutContext("Layout.Navigation");
+  const { headers, currentSection } = useLayoutContext("Layout.Navigation");
 
   return (
     <nav className={className}>
       <h2>Contents</h2>
       <ul>
         {headers.map((heading) => (
-          <li key={heading}>
+          <li
+            key={heading}
+            className={currentSection === heading ? style["active"] : ""}
+          >
             <a href={`#${heading}`}>{linksAs ? linksAs(heading) : heading}</a>
           </li>
         ))}
@@ -124,19 +142,15 @@ interface ContentProps {
 export function Content({ children }: ContentProps) {
   const sectionsHeaders = useMemo(() => {
     if (!Array.isArray(children)) {
-      return children.props.heading;
+      return [children.props.heading];
     }
-
     return children.map((child) => child.props.heading);
   }, [children]);
+
   const { updateHeaders } = useLayoutContext("Layout.Content");
 
   useEffect(() => {
-    if (Array.isArray(sectionsHeaders)) {
-      updateHeaders(sectionsHeaders);
-    } else {
-      updateHeaders([sectionsHeaders]);
-    }
+    updateHeaders(sectionsHeaders);
   }, [sectionsHeaders, updateHeaders]);
 
   return <section>{children}</section>;
@@ -159,10 +173,32 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 export function Section({ heading, children, ...rest }: SectionProps) {
   // Throws errors if used outside the root layout
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const context = useLayoutContext("Layout.Section");
+  const { updateCurrentSection } = useLayoutContext("Layout.Section");
+
+  const reference = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (reference.current === null) return;
+    const subject = reference.current;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) updateCurrentSection(heading);
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.8,
+      }
+    );
+
+    observer.observe(subject);
+
+    return () => observer.disconnect();
+  }, [updateCurrentSection, heading]);
 
   return (
-    <section id={heading} {...rest}>
+    <section id={heading} ref={reference} {...rest}>
       {children}
     </section>
   );

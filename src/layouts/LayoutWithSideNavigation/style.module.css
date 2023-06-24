@@ -14,3 +14,7 @@
 .content {
   flex-grow: 1;
 }
+
+.active {
+  background-color: aquamarine;
+}
