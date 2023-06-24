@@ -8,9 +8,6 @@
 }
 
 .Navbar {
-  /* position: sticky;
-  top: 0px; */
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,13 +27,16 @@
   align-items: center;
 }
 
-/* Generic Classes */
-.section {
-  min-height: 100vh;
-
-  /* scroll-margin-top: var(--navbar-height); */
+/* Layout Classes */
+.navigation-internal {
+  padding: 1rem 2rem 1rem 1rem;
 }
 
+.section {
+  min-height: 100vh;
+}
+
+/* Generic classes */
 .glass-frosted {
   /* From https://css.glass */
   background: rgba(167, 167, 167, 0.26);

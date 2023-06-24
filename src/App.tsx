@@ -1,5 +1,5 @@
 import "./App.css";
-import Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
+import * as Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
 
 import htmlPerspectives from "./assets/html-perspectives.png";
 
@@ -16,7 +16,7 @@ function App() {
       </header>
 
       <Layout.Root asMain className="Main">
-        <Layout.Navigation />
+        <Layout.Navigation className="navigation-internal" />
 
         <Layout.Content>
           <Layout.Section heading="Introduction" className="section">

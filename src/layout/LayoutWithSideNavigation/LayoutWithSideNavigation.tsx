@@ -37,19 +37,16 @@ const useLayoutContext = (componentName: string) => {
   return context;
 };
 
-interface RootProps
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLElement>,
-    HTMLElement
-  > {
+interface RootProps {
   asMain?: true | undefined;
   children: [
     React.ReactElement<NavigationProps>,
     React.ReactElement<ContentProps>
   ];
+  className?: string;
 }
 
-const Root = ({ children, asMain, className, ...rest }: RootProps) => {
+export const Root = ({ children, asMain, className }: RootProps) => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [navigation, content] = children;
 
@@ -61,7 +58,7 @@ const Root = ({ children, asMain, className, ...rest }: RootProps) => {
 
   return (
     <LayoutContext value={{ headers, updateHeaders }}>
-      <Element className={style["container"] + " " + className} {...rest}>
+      <Element className={style["container"] + " " + className}>
         <div className={style["navigation"]}>{navigation}</div>
         <div className={style["content"]}>{content}</div>
       </Element>
@@ -71,14 +68,15 @@ const Root = ({ children, asMain, className, ...rest }: RootProps) => {
 
 interface NavigationProps {
   linksAs?: (title: string) => JSX.Element;
+  className?: string;
 }
 
-const Navigation = ({ linksAs }: NavigationProps) => {
+export const Navigation = ({ linksAs, className }: NavigationProps) => {
   const { headers } = useLayoutContext("Layout.Navigation");
 
   return (
-    <nav className="">
-      <h2>Navigation</h2>
+    <nav className={className}>
+      <h2>Contents</h2>
       <ul>
         {headers.map((heading) => (
           <li key={heading}>
@@ -94,7 +92,7 @@ interface ContentProps {
   children: React.ReactElement<SectionProps>[];
 }
 
-const Content = ({ children }: ContentProps) => {
+export const Content = ({ children }: ContentProps) => {
   const sectionsHeaders = children.map((child) => child.props.heading);
   const { updateHeaders } = useLayoutContext("Layout.Content");
 
@@ -110,17 +108,10 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
 }
 
-const Section = ({ heading, children, ...rest }: SectionProps) => {
+export const Section = ({ heading, children, ...rest }: SectionProps) => {
   return (
     <section id={heading} {...rest}>
       {children}
     </section>
   );
-};
-
-export default {
-  Root,
-  Navigation,
-  Content,
-  Section,
 };
