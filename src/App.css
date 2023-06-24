@@ -23,3 +23,8 @@
   flex-direction: column;
   align-items: center;
 }
+
+/* Generic Classes */
+.section {
+  min-height: 100vh;
+}

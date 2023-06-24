@@ -1,11 +1,20 @@
 .container {
   background-color: brown;
+  position: relative;
+
+  display: flex;
 }
 
 .navigation {
   background-color: cadetblue;
+
+  position: sticky;
+  left: 0px;
+  top: 0px;
+  height: min-content;
 }
 
 .content {
   background-color: coral;
+  flex-grow: 1;
 }

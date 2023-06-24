@@ -1,45 +1,59 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import style from "./style.module.css";
 
 interface RootProps {
-  children: React.ReactNode;
+  children: [
+    React.ReactElement<NavigationProps>,
+    React.ReactElement<ContentProps>
+  ];
 }
 
-export function Root({ children }: RootProps) {
+const Root = ({ children }: RootProps) => {
+  const [navigation, content] = children;
+
   return (
     <section className={style["container"]}>
-      <h1>Container</h1>
-      {children}
+      <div className={style["navigation"]}>{navigation}</div>
+      <div className={style["content"]}>{content}</div>
     </section>
   );
-}
+};
 
 interface NavigationProps {}
 
-export function Navigation(props: NavigationProps) {
+const Navigation = (props: NavigationProps) => {
   return (
-    <section className={style["navigation"]}>
+    <nav>
       <h2>Navigation</h2>
-    </section>
+    </nav>
   );
-}
+};
 
 interface ContentProps {
+  children: React.ReactElement<SectionProps>[];
+}
+
+const Content = ({ children }: ContentProps) => {
+  return <section>{children}</section>;
+};
+
+interface SectionProps extends HTMLAttributes<HTMLElement> {
+  heading: string;
   children: React.ReactNode;
 }
 
-export function Content({ children }: ContentProps) {
-  return <section>{children}</section>;
-}
-
-interface SectionProps {
-  title: string;
-}
-
-export function Section({ title }: SectionProps) {
+const Section = ({ heading, children, ...rest }: SectionProps) => {
   return (
-    <section id={title} className={style["content"]}>
-      <h2>{title}</h2>
+    <section id={heading} {...rest}>
+      <h2>{heading}</h2>
+      {children}
     </section>
   );
-}
+};
+
+export default {
+  Root,
+  Navigation,
+  Content,
+  Section,
+};

@@ -1,5 +1,5 @@
 import "./App.css";
-import * as LayoutWithSideNavigation from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
+import Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
 
 function App() {
   return (
@@ -12,19 +12,47 @@ function App() {
       </header>
 
       <main className="Main">
-        <LayoutWithSideNavigation.Root>
-          <LayoutWithSideNavigation.Navigation />
+        <Layout.Root>
+          <Layout.Navigation />
 
-          <LayoutWithSideNavigation.Content>
-            <LayoutWithSideNavigation.Section title="Introduction"></LayoutWithSideNavigation.Section>
+          <Layout.Content>
+            <Layout.Section heading="Introduction" className="section">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+                quasi atque ex eveniet illo nostrum maxime delectus quaerat
+                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
+                quae adipisci quia totam?
+              </p>
+            </Layout.Section>
 
-            <LayoutWithSideNavigation.Section title="Problem"></LayoutWithSideNavigation.Section>
+            <Layout.Section heading="Problem" className="section">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+                quasi atque ex eveniet illo nostrum maxime delectus quaerat
+                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
+                quae adipisci quia totam?
+              </p>
+            </Layout.Section>
 
-            <LayoutWithSideNavigation.Section title="Proposed Solution"></LayoutWithSideNavigation.Section>
+            <Layout.Section heading="Proposed Solution" className="section">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+                quasi atque ex eveniet illo nostrum maxime delectus quaerat
+                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
+                quae adipisci quia totam?
+              </p>
+            </Layout.Section>
 
-            <LayoutWithSideNavigation.Section title="Caveats"></LayoutWithSideNavigation.Section>
-          </LayoutWithSideNavigation.Content>
-        </LayoutWithSideNavigation.Root>
+            <Layout.Section heading="Caveats" className="section">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
+                quasi atque ex eveniet illo nostrum maxime delectus quaerat
+                perspiciatis quibusdam deserunt, harum fugiat beatae facilis
+                quae adipisci quia totam?
+              </p>
+            </Layout.Section>
+          </Layout.Content>
+        </Layout.Root>
       </main>
 
       <footer className="Footer">
