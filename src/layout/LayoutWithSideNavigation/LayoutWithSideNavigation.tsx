@@ -45,7 +45,6 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 const Section = ({ heading, children, ...rest }: SectionProps) => {
   return (
     <section id={heading} {...rest}>
-      <h2>{heading}</h2>
       {children}
     </section>
   );

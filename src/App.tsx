@@ -17,6 +17,7 @@ function App() {
 
           <Layout.Content>
             <Layout.Section heading="Introduction" className="section">
+              <h2>Introduction</h2>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
                 quasi atque ex eveniet illo nostrum maxime delectus quaerat
@@ -26,6 +27,7 @@ function App() {
             </Layout.Section>
 
             <Layout.Section heading="Problem" className="section">
+              <h2>Problem</h2>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
                 quasi atque ex eveniet illo nostrum maxime delectus quaerat
@@ -35,6 +37,7 @@ function App() {
             </Layout.Section>
 
             <Layout.Section heading="Proposed Solution" className="section">
+              <h2>Proposed Solution</h2>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
                 quasi atque ex eveniet illo nostrum maxime delectus quaerat
@@ -44,6 +47,7 @@ function App() {
             </Layout.Section>
 
             <Layout.Section heading="Caveats" className="section">
+              <h2>Caveats</h2>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem
                 quasi atque ex eveniet illo nostrum maxime delectus quaerat
