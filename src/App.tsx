@@ -1,19 +1,25 @@
 import "./App.css";
 import * as Layout from "./layouts/LayoutWithSideNavigation/LayoutWithSideNavigation";
+import * as Navbar from "./layouts/NavbarBasic/NavbarBasic";
 
 import htmlPerspectives from "./assets/html-perspectives.png";
 
 function App() {
   return (
     <div className="App">
-      <header className="Navbar glass-frosted">
-        <a href="/">
-          <div>
-            <h1>Layout Component</h1>
-            <h2>Example of a Layout Component with a navigation sidebar</h2>
-          </div>
-        </a>
-      </header>
+      <Navbar.Root className="Navbar glass-frosted">
+        <Navbar.Logo linkHome>
+          <svg
+            viewBox="0 0 100 100"
+            height={80}
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <circle cx={50} cy={50} r={50} fill="orange"></circle>
+          </svg>
+        </Navbar.Logo>
+        <h1>Layout Component</h1>
+      </Navbar.Root>
 
       <Layout.Root asMain className="Main">
         <Layout.Navigation className="navigation-internal" />
