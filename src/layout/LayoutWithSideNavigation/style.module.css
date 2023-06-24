@@ -10,7 +10,7 @@
 
   position: sticky;
   left: 0px;
-  top: 0px;
+  top: 50%;
   height: min-content;
 }
 
