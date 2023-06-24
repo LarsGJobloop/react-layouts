@@ -3,6 +3,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import style from "./style.module.css";
@@ -38,7 +39,14 @@ const useLayoutContext = (componentName: string) => {
 };
 
 interface RootProps {
+  /**
+   * Should this be the main Page element?
+   */
   asMain?: true | undefined;
+  /**
+   * One Navigation component
+   * and one Content component
+   */
   children: [
     React.ReactElement<NavigationProps>,
     React.ReactElement<ContentProps>
@@ -47,7 +55,7 @@ interface RootProps {
 }
 
 /**
- * Root component for the layout
+ * The Layout Root component
  */
 export function Root({ children, asMain, className }: RootProps) {
   const [headers, setHeaders] = useState<string[]>([]);
@@ -74,6 +82,9 @@ interface NavigationProps {
   className?: string;
 }
 
+/**
+ * Sided Navigation component
+ */
 export function Navigation({ linksAs, className }: NavigationProps) {
   const { headers } = useLayoutContext("Layout.Navigation");
 
@@ -92,25 +103,40 @@ export function Navigation({ linksAs, className }: NavigationProps) {
 }
 
 interface ContentProps {
+  /**
+   * Any number of Section Components
+   */
   children: React.ReactElement<SectionProps>[];
 }
 
+/**
+ * Container Component for the sections
+ */
 export function Content({ children }: ContentProps) {
-  const sectionsHeaders = children.map((child) => child.props.heading);
+  const sectionsHeaders = useMemo(
+    () => children.map((child) => child.props.heading),
+    [children]
+  );
   const { updateHeaders } = useLayoutContext("Layout.Content");
 
   useEffect(() => {
     updateHeaders(sectionsHeaders);
-  }, []);
+  }, [sectionsHeaders, updateHeaders]);
 
   return <section>{children}</section>;
 }
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
   heading: string;
+  /**
+   * Any number of HTML Elements or React Components
+   */
   children: React.ReactNode;
 }
 
+/**
+ * A section component which is linked to through the Navigtion component
+ */
 export function Section({ heading, children, ...rest }: SectionProps) {
   return (
     <section id={heading} {...rest}>
