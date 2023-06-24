@@ -1,6 +1,8 @@
 import "./App.css";
 import Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
 
+import htmlPerspectives from "./assets/html-perspectives.png";
+
 function App() {
   return (
     <div className="App">
@@ -26,6 +28,7 @@ function App() {
                 perspiciatis quibusdam deserunt, harum fugiat beatae facilis
                 quae adipisci quia totam?
               </p>
+              <img src={htmlPerspectives} alt="" />
             </Layout.Section>
 
             <Layout.Section heading="Problem" className="section">
