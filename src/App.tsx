@@ -5,10 +5,12 @@ function App() {
   return (
     <div className="App">
       <header className="Navbar glass-frosted">
-        <div>
-          <h1>Layout Component</h1>
-          <h2>Example of a Layout Component with a navigation sidebar</h2>
-        </div>
+        <a href="/">
+          <div>
+            <h1>Layout Component</h1>
+            <h2>Example of a Layout Component with a navigation sidebar</h2>
+          </div>
+        </a>
       </header>
 
       <main className="Main">
@@ -36,7 +38,7 @@ function App() {
               </p>
             </Layout.Section>
 
-            <Layout.Section heading="Proposed Solution" className="section">
+            <Layout.Section heading="Solution" className="section">
               <h2>Proposed Solution</h2>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea rem

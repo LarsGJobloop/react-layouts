@@ -1,29 +1,36 @@
-import React, { HTMLAttributes, createContext, useContext } from "react";
+import React, {
+  HTMLAttributes,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import style from "./style.module.css";
 
 const layoutContext = createContext<ILayoutContext | undefined>(undefined);
 
 interface ILayoutContext {
   headers: string[];
+  updateHeaders: (newHeaders: string[]) => void;
 }
 
-interface LayoutContextProps {
+interface LayoutContextOptions {
   value: ILayoutContext;
   children: React.ReactNode;
 }
 
-const LayoutContext = ({ value, children }: LayoutContextProps) => {
+const LayoutContext = ({ value, children }: LayoutContextOptions) => {
   return (
     <layoutContext.Provider value={value}>{children}</layoutContext.Provider>
   );
 };
 
-const useLayoutContext = () => {
+const useLayoutContext = (componentName: string) => {
   const context = useContext(layoutContext);
 
   if (!context) {
     throw new Error(
-      "This component must be used within the Layout.Root component"
+      `${componentName} must be a child of the Layout.Root component`
     );
   }
 
@@ -38,12 +45,15 @@ interface RootProps {
 }
 
 const Root = ({ children }: RootProps) => {
+  const [headers, setHeaders] = useState<string[]>([]);
   const [navigation, content] = children;
 
-  const headers = ["Hello", "World", "Fooo", "Baaard"];
+  function updateHeaders(newHeaders: string[]) {
+    setHeaders(() => newHeaders);
+  }
 
   return (
-    <LayoutContext value={{ headers }}>
+    <LayoutContext value={{ headers, updateHeaders }}>
       <section className={style["container"]}>
         <div className={style["navigation"]}>{navigation}</div>
         <div className={style["content"]}>{content}</div>
@@ -57,7 +67,7 @@ interface NavigationProps {
 }
 
 const Navigation = ({ linksAs }: NavigationProps) => {
-  const { headers } = useLayoutContext();
+  const { headers } = useLayoutContext("Layout.Navigation");
 
   return (
     <nav className="">
@@ -78,6 +88,13 @@ interface ContentProps {
 }
 
 const Content = ({ children }: ContentProps) => {
+  const sectionsHeaders = children.map((child) => child.props.heading);
+  const { updateHeaders } = useLayoutContext("Layout.Content");
+
+  useEffect(() => {
+    updateHeaders(sectionsHeaders);
+  }, []);
+
   return <section>{children}</section>;
 };
 
