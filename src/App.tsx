@@ -3,20 +3,14 @@ import * as Layout from "./layouts/LayoutWithSideNavigation/LayoutWithSideNaviga
 import * as Navbar from "./layouts/NavbarBasic/NavbarBasic";
 
 import htmlPerspectives from "./assets/html-perspectives.png";
+import { Logo } from "./components/Logo/Logo";
 
 function App() {
   return (
     <div className="App">
       <Navbar.Root className="Navbar glass-frosted">
         <Navbar.Logo linkHome>
-          <svg
-            viewBox="0 0 100 100"
-            height={80}
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-          >
-            <circle cx={50} cy={50} r={50} fill="orange"></circle>
-          </svg>
+          <Logo />
         </Navbar.Logo>
         <h1>Layout Component</h1>
       </Navbar.Root>
