@@ -1,5 +1,5 @@
 import "./App.css";
-import * as Layout from "./layout/LayoutWithSideNavigation/LayoutWithSideNavigation";
+import * as Layout from "./layouts/LayoutWithSideNavigation/LayoutWithSideNavigation";
 
 import htmlPerspectives from "./assets/html-perspectives.png";
 
