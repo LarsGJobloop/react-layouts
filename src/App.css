@@ -12,10 +12,7 @@
   justify-content: space-between;
   align-items: center;
 
-  z-index: 9999;
-
   height: var(--navbar-height);
-
   padding: 0px 1rem;
 }
 
@@ -32,10 +29,14 @@
 /* Layout Classes */
 .navigation-internal {
   padding: 1rem 2rem 1rem 1rem;
+
+  padding-top: var(--navbar-height);
 }
 
 .section {
   min-height: 100vh;
+
+  scroll-margin-top: var(--navbar-height);
 }
 
 /* Generic classes */

@@ -8,7 +8,7 @@ import { Logo } from "./components/Logo/Logo";
 function App() {
   return (
     <div className="App">
-      <Navbar.Root className="Navbar glass-frosted">
+      <Navbar.Root sticky className="Navbar glass-frosted">
         <Navbar.Logo linkHome>
           <Logo />
         </Navbar.Logo>

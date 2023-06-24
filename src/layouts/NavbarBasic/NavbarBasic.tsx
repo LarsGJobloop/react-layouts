@@ -4,9 +4,10 @@ import style from "./style.module.css";
 interface RootProps {
   className?: string;
   children: JSX.Element[] | JSX.Element;
+  sticky?: true;
 }
 
-export function Root({ className, children }: RootProps) {
+export function Root({ className, children, sticky }: RootProps) {
   let logo;
   let remainder;
 
@@ -18,8 +19,14 @@ export function Root({ className, children }: RootProps) {
     logo = children;
   }
 
+  const headerClasses = [
+    style["container"],
+    sticky && style["sticky"],
+    className,
+  ].join(" ");
+
   return (
-    <header className={style["container"] + " " + className}>
+    <header className={headerClasses}>
       {logo}
       {remainder}
     </header>
