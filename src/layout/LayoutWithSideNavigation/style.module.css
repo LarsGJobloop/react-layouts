@@ -1,13 +1,10 @@
 .container {
-  background-color: brown;
   position: relative;
 
   display: flex;
 }
 
 .navigation {
-  background-color: chartreuse;
-
   position: sticky;
   left: 0px;
   top: 50%;
@@ -15,6 +12,5 @@
 }
 
 .content {
-  background-color: coral;
   flex-grow: 1;
 }
