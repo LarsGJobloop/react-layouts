@@ -2,7 +2,8 @@ import { useEffect } from "react";
 
 export function useIntersectionObserver(
   ref: React.MutableRefObject<HTMLElement | null>,
-  callback: () => void
+  callback: () => void,
+  options?: Partial<IntersectionObserverInit>
 ) {
   useEffect(() => {
     if (ref.current === null) return;
@@ -15,14 +16,14 @@ export function useIntersectionObserver(
         }
       },
       {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.8,
+        root: options?.root || null,
+        rootMargin: options?.rootMargin || "0px",
+        threshold: options?.threshold || 0.8,
       }
     );
 
     observer.observe(subject);
 
     return () => observer.disconnect();
-  }, [ref, callback]);
+  }, [ref, callback, options]);
 }
