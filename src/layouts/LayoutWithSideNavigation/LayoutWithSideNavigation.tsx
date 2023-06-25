@@ -1,13 +1,15 @@
 import React, {
   HTMLAttributes,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
-  useCallback,
   useSyncExternalStore,
 } from "react";
+import { useIntersectionObserver } from "./useIntersectionObserver";
+
 import style from "./style.module.css";
 
 function useHeaderStore() {
@@ -223,27 +225,7 @@ export function Section({ heading, children, ...rest }: SectionProps) {
 
   const reference = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (reference.current === null) return;
-    const subject = reference.current;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setView(heading);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.8,
-      }
-    );
-
-    observer.observe(subject);
-
-    return () => observer.disconnect();
-  }, [setView, heading]);
+  useIntersectionObserver(reference, () => setView(heading));
 
   return (
     <section id={heading} ref={reference} {...rest}>
