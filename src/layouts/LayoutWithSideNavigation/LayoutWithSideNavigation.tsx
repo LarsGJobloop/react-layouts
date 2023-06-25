@@ -63,6 +63,9 @@ interface NavigationProps {
 
 /**
  * Sided Navigation component
+ *
+ * @example
+ * <Navigation />
  */
 export function Navigation({ linksAs, className }: NavigationProps) {
   const { headers } = useHeaders("Layout.Navigation");
@@ -93,6 +96,14 @@ interface ContentProps {
 
 /**
  * Container Component for the sections
+ *
+ * @example
+ * <Content>
+ *  <Section heading="Section Title" >
+ *   <h2>Section Title</h2>
+ *   <p>More parts here</p>
+ *  </Section>
+ * </Content>
  */
 export function Content({ children }: ContentProps) {
   const sectionsHeaders = useMemo(() => {
@@ -113,7 +124,7 @@ export function Content({ children }: ContentProps) {
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
   /**
-   * ID and text used for sided navigation
+   * Text used in the sided Navbar
    */
   heading: string;
   /**
@@ -124,6 +135,12 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * A section component which generates links in the sided Navbar
+ *
+ * @example
+ * <Section heading="Shining Star">
+ *  <h2>Shining Star</h2>
+ *  <p>So shiny! Give 'em to me!</p>
+ * </Section>
  */
 export function Section({ heading, children, ...rest }: SectionProps) {
   const { setView } = useView("Layout.Section");

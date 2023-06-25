@@ -9,8 +9,7 @@ import { useEffect } from "react";
  *
  * @example
  * const ref = React.useRef(null)
- *
- * useIntersectionObserver(() => console.log("intersecting"))
+ * useIntersectionObserver(ref, () => console.log("intersecting"))
  *
  * <Element ref={ref} />
  */
