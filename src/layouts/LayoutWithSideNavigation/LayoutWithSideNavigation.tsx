@@ -5,44 +5,111 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useCallback,
+  useSyncExternalStore,
 } from "react";
 import style from "./style.module.css";
 
-const layoutContext = createContext<ILayoutContext | undefined>(undefined);
+function useHeaderStore() {
+  const store = useRef<string[]>([]);
+  const subscribers = useRef(new Set<() => void>());
 
-interface ILayoutContext {
-  headers: string[];
-  updateHeaders: (newHeaders: string[]) => void;
-  currentSection: string;
-  updateCurrentSection: (newSection: string) => void;
+  const get = useCallback(() => store.current, []);
+  const set = useCallback((newHeaders: string[]) => {
+    store.current = newHeaders;
+    subscribers.current.forEach((callback) => callback());
+  }, []);
+
+  const subscribe = useCallback((callback: () => void) => {
+    subscribers.current.add(callback);
+    return () => {
+      subscribers.current.delete(callback);
+    };
+  }, []);
+
+  return {
+    get,
+    set,
+    subscribe,
+  };
 }
 
-interface LayoutContextOptions {
-  value: ILayoutContext;
-  children: React.ReactNode;
+function useViewStore() {
+  const store = useRef<string>("");
+  const subscribers = useRef(new Set<() => void>());
+
+  const get = useCallback(() => store.current, []);
+  const set = useCallback((newView: string) => {
+    store.current = newView;
+    subscribers.current.forEach((callback) => callback());
+  }, []);
+
+  const subscribe = useCallback((callback: () => void) => {
+    subscribers.current.add(callback);
+    return () => {
+      subscribers.current.delete(callback);
+    };
+  }, []);
+
+  return {
+    get,
+    set,
+    subscribe,
+  };
 }
 
-function LayoutContext({ value, children }: LayoutContextOptions) {
+type LayoutContext = {
+  headers: ReturnType<typeof useHeaderStore>;
+  view: ReturnType<typeof useViewStore>;
+};
+
+const layoutContext = createContext<LayoutContext | null>(null);
+
+function Provider({ children }: { children: React.ReactNode }) {
   return (
-    <layoutContext.Provider value={value}>{children}</layoutContext.Provider>
+    <layoutContext.Provider
+      value={{ headers: useHeaderStore(), view: useViewStore() }}
+    >
+      {children}
+    </layoutContext.Provider>
   );
 }
 
 /**
  * @param componentName Name of component to ease debugging
- * @returns
  */
-const useLayoutContext = (componentName: string) => {
-  const context = useContext(layoutContext);
+const useHeaders = (componentName: string) => {
+  const store = useContext(layoutContext);
 
-  if (!context) {
+  if (!store) {
     throw new Error(
       `${componentName} must be a child of the Layout.Root component`
     );
   }
 
-  return context;
+  const headers = useSyncExternalStore(
+    store.headers.subscribe,
+    store.headers.get
+  );
+
+  return { headers, setHeaders: store.headers.set };
+};
+
+/**
+ * @param componentName Name of component to ease debugging
+ */
+const useView = (componentName: string) => {
+  const store = useContext(layoutContext);
+
+  if (!store) {
+    throw new Error(
+      `${componentName} must be a child of the Layout.Root component`
+    );
+  }
+
+  const view = useSyncExternalStore(store.view.subscribe, store.view.get);
+
+  return { view, setView: store.view.set };
 };
 
 interface RootProps {
@@ -65,34 +132,17 @@ interface RootProps {
  * The Layout Root component
  */
 export function Root({ children, asMain, className }: RootProps) {
-  const [headers, setHeaders] = useState<string[]>([]);
-  const [currentSection, setCurrentSection] = useState<string>("");
   const [navigation, content] = children;
-
-  function updateHeaders(newHeaders: string[]) {
-    setHeaders(() => newHeaders);
-  }
-
-  function updateCurrentSection(newSection: string) {
-    setCurrentSection(newSection);
-  }
-
-  const context: ILayoutContext = {
-    headers,
-    updateHeaders,
-    currentSection,
-    updateCurrentSection,
-  };
 
   const Element = asMain ? "main" : "section";
 
   return (
-    <LayoutContext value={context}>
+    <Provider>
       <Element className={style["container"] + " " + className}>
         <div className={style["navigation"]}>{navigation}</div>
         <div className={style["content"]}>{content}</div>
       </Element>
-    </LayoutContext>
+    </Provider>
   );
 }
 
@@ -108,17 +158,15 @@ interface NavigationProps {
  * Sided Navigation component
  */
 export function Navigation({ linksAs, className }: NavigationProps) {
-  const { headers, currentSection } = useLayoutContext("Layout.Navigation");
+  const { headers } = useHeaders("Layout.Navigation");
+  const { view } = useView("Layout.Navigation");
 
   return (
     <nav className={className}>
       <h2>Contents</h2>
       <ul>
         {headers.map((heading) => (
-          <li
-            key={heading}
-            className={currentSection === heading ? style["active"] : ""}
-          >
+          <li key={heading} className={view === heading ? style["active"] : ""}>
             <a href={`#${heading}`}>{linksAs ? linksAs(heading) : heading}</a>
           </li>
         ))}
@@ -147,11 +195,11 @@ export function Content({ children }: ContentProps) {
     return children.map((child) => child.props.heading);
   }, [children]);
 
-  const { updateHeaders } = useLayoutContext("Layout.Content");
+  const { setHeaders } = useHeaders("Layout.Content");
 
   useEffect(() => {
-    updateHeaders(sectionsHeaders);
-  }, [sectionsHeaders, updateHeaders]);
+    setHeaders(sectionsHeaders);
+  }, [sectionsHeaders, setHeaders]);
 
   return <section>{children}</section>;
 }
@@ -171,9 +219,7 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
  * A section component which is linked to through the Navigtion component
  */
 export function Section({ heading, children, ...rest }: SectionProps) {
-  // Throws errors if used outside the root layout
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { updateCurrentSection } = useLayoutContext("Layout.Section");
+  const { setView } = useView("Layout.Section");
 
   const reference = useRef<HTMLElement | null>(null);
 
@@ -183,7 +229,9 @@ export function Section({ heading, children, ...rest }: SectionProps) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) updateCurrentSection(heading);
+        if (entry.isIntersecting) {
+          setView(heading);
+        }
       },
       {
         root: null,
@@ -195,7 +243,7 @@ export function Section({ heading, children, ...rest }: SectionProps) {
     observer.observe(subject);
 
     return () => observer.disconnect();
-  }, [updateCurrentSection, heading]);
+  }, [setView, heading]);
 
   return (
     <section id={heading} ref={reference} {...rest}>
