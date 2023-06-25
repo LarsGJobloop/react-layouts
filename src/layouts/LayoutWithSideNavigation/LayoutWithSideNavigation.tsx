@@ -131,6 +131,10 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
    * Any number of HTML Elements or React Components
    */
   children: React.ReactNode;
+  /**
+   * Sets this section to be a self contained Article
+   */
+  asArticle?: true;
 }
 
 /**
@@ -142,16 +146,21 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
  *  <p>So shiny! Give 'em to me!</p>
  * </Section>
  */
-export function Section({ heading, children, ...rest }: SectionProps) {
+export function Section({
+  heading,
+  children,
+  asArticle,
+  ...rest
+}: SectionProps) {
   const { setView } = useView("Layout.Section");
-
   const reference = useRef<HTMLElement | null>(null);
-
   useIntersectionObserver(reference, () => setView(heading));
 
+  const Container = asArticle ? "article" : "section";
+
   return (
-    <section id={heading} ref={reference} {...rest}>
+    <Container id={heading} ref={reference} {...rest}>
       {children}
-    </section>
+    </Container>
   );
 }
