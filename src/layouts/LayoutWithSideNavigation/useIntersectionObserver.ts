@@ -1,8 +1,22 @@
 import { useEffect } from "react";
 
+/**
+ * A hook that runs whenever the given element enters the viewport
+ *
+ * @param ref for element to observe
+ * @param onEnter will be called when element enters the viewport
+ * @param options for configuring the observer
+ *
+ * @example
+ * const ref = React.useRef(null)
+ *
+ * useIntersectionObserver(() => console.log("intersecting"))
+ *
+ * <Element ref={ref} />
+ */
 export function useIntersectionObserver(
   ref: React.MutableRefObject<HTMLElement | null>,
-  callback: () => void,
+  onEnter: () => void,
   options?: Partial<IntersectionObserverInit>
 ) {
   useEffect(() => {
@@ -12,7 +26,7 @@ export function useIntersectionObserver(
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          callback();
+          onEnter();
         }
       },
       {
@@ -25,5 +39,5 @@ export function useIntersectionObserver(
     observer.observe(subject);
 
     return () => observer.disconnect();
-  }, [ref, callback, options]);
+  }, [ref, onEnter, options]);
 }
