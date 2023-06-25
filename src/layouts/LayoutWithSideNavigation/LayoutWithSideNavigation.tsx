@@ -22,6 +22,18 @@ interface RootProps {
 
 /**
  * The Layout Root component
+ *
+ * @example
+ * <Root>
+ *  <Navigation />
+ *
+ *  <Content>
+ *   <Section>
+ *    <h2>This is a Section</h2>
+ *    <p>With some content</p>
+ *   </Section>
+ *  </Content>
+ * </Root>
  */
 export function Root({ children, asMain, className }: RootProps) {
   const [navigation, content] = children;
