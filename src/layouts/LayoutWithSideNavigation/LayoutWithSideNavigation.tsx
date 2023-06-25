@@ -53,8 +53,11 @@ export function Root({ children, asMain, className }: RootProps) {
 interface NavigationProps {
   /**
    * An alternative component for the link elements
+   *
+   * @example
+   * <Navigation linksAs={(heading) => <h1>{heading}</h1>} />
    */
-  linksAs?: (title: string) => JSX.Element;
+  linksAs?: (heading: string) => JSX.Element;
   className?: string;
 }
 
