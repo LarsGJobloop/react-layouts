@@ -120,7 +120,7 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 }
 
 /**
- * A section component which is linked to through the Navigtion component
+ * A section component which generates links in the sided Navbar
  */
 export function Section({ heading, children, ...rest }: SectionProps) {
   const { setView } = useView("Layout.Section");
